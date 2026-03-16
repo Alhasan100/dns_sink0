@@ -1,9 +1,10 @@
 """
 Description: A lightweight, fast DNS Sinkhole (Adblocker) with dynamic blocklist downloading and in-memory caching.
-Version: 1.2.0
+Version: 1.3.0
 Author: Alhasan Al-Hmondi
 """
 
+import os
 import socket
 import logging
 import urllib.request
@@ -16,13 +17,13 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
-# --- CONFIGURATION ---
+# --- CONFIGURATION (Now dynamically loaded from .env) ---
 HOST = '0.0.0.0'
 PORT = 53
-UPSTREAM_DNS = '8.8.8.8'
-UPSTREAM_PORT = 53
-# Time-to-live for cached DNS responses (in seconds). 300s = 5 minutes.
-CACHE_TTL = 300
+# os.getenv grabs the value from Docker. If missing, it defaults to the second argument.
+UPSTREAM_DNS = os.getenv('UPSTREAM_DNS', '8.8.8.8')
+UPSTREAM_PORT = int(os.getenv('UPSTREAM_PORT', 53))
+CACHE_TTL = int(os.getenv('CACHE_TTL', 300))
 
 # We use StevenBlack's highly respected open-source hosts file for our blocklist
 BLOCKLIST_URL = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"

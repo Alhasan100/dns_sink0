@@ -1,5 +1,11 @@
-# Tvinga Git att alltid använda LF (Linux-stil) för shell-skript
+# ==============================================================================
+# Description: Git configuration to enforce correct line endings across platforms.
+# Version: 1.0.0
+# Author: Alhasan Al-Hmondi
+# ==============================================================================
+
+# Force Git to always use LF (Linux-style) for shell scripts to prevent execution errors
 *.sh text eol=lf
 
-# Tvinga Git att alltid använda CRLF (Windows-stil) för batch-skript
+# Force Git to always use CRLF (Windows-style) for batch scripts
 *.bat text eol=crlf
