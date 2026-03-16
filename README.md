@@ -1,6 +1,3 @@
-Här är din uppdaterade `README.md` för version 1.4.0, komplett med den nya auto-uppdateringsfunktionen och den nya miljövariabeln i tabellen. Bara att kopiera och klistra in!
-
-```markdown
 # 🛡️ DNS Sinkhole
 **Version:** 1.4.0 | **Author:** Alhasan Al-Hmondi
 
@@ -84,7 +81,5 @@ Once you have verified the server is working:
 2. Find the **DHCP / LAN / DNS** settings.
 3. Change the **Primary DNS Server** to the IP address of the machine running this container.
 4. Save and reboot your router. Now, every device connected to your Wi-Fi is ad-free!
-
-```
 
 ```
