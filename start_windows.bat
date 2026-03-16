@@ -64,11 +64,18 @@ echo ------------------------------------------------------------------
 docker compose up -d --build
 
 if %errorLevel% equ 0 (
+    :: Hämta den aktiva lokala IP-adressen (använder PowerShell i bakgrunden)
+    for /f "delims=" %%i in ('powershell -Command "(Get-NetIPConfiguration | Where-Object { $_.IPv4DefaultGateway -ne $null }).IPv4Address.IPAddress"') do set LOCAL_IP=%%i
+
     echo.
     echo ==================================================================
     echo  [SUCCESS] DNS Sinkhole is now active and operational! 
     echo ==================================================================
-    echo Next Step: Configure your router's Primary DNS to point to this machine's IP address.
+    echo Next Step: Configure your router's Primary DNS to point to this IP:
+    echo.
+    echo      --^>  !LOCAL_IP!  ^<--
+    echo.
+    echo ==================================================================
 ) else (
     echo.
     echo [ERROR] Docker deployment failed. Is Docker Desktop running?

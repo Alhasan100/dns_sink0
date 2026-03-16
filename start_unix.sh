@@ -62,10 +62,23 @@ echo "[INFO] Building and provisioning the Docker container..."
 docker compose up -d --build
 
 if [ $? -eq 0 ]; then
+    # Försök hämta den lokala IP-adressen
+    if [ "$OS" = "Linux" ]; then
+        LOCAL_IP=$(hostname -I | awk '{print $1}')
+    elif [ "$OS" = "Darwin" ]; then
+        LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1)
+    else
+        LOCAL_IP="<din-dators-ip>"
+    fi
+
     echo "=================================================================="
     echo " [SUCCESS] DNS Sinkhole is now active and operational! "
     echo "=================================================================="
-    echo "Next Step: Configure your router's Primary DNS to point to this machine's IP address."
+    echo "Next Step: Configure your router's Primary DNS to point to this IP:"
+    echo " "
+    echo "     -->  $LOCAL_IP  <--"
+    echo " "
+    echo "=================================================================="
 else
     echo "[ERROR] Docker deployment failed. Please review the logs above."
     exit 1
