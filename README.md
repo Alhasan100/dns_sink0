@@ -1,16 +1,16 @@
-# 🛡️ DNS Sinkhole
+# 🛡️ DNS Sink0
 **Version:** 1.4.0 | **Author:** Alhasan Al-Hmondi
 
 
 
-A lightweight, blazing-fast DNS Sinkhole (network-wide adblocker) built with Python and Docker. It protects your entire home network by intercepting DNS requests to known ad, tracking, and malware domains, routing them into a "sinkhole" (0.0.0.0) before they can even load.
+A lightweight, blazing-fast DNS Sinkhole (network-wide adblocker) built with Python and Docker. **DNS Sink0** protects your entire home network by intercepting DNS requests to known ad, tracking, and malware domains, routing them into a "sinkhole" (0.0.0.0) before they can even load.
 
 ## ✨ Features
 * **Dynamic Blocklist:** Automatically downloads over 100,000+ domains from StevenBlack's respected hosts file.
 * **Background Auto-Update:** Silently refreshes the blocklist in the background at custom intervals without dropping a single DNS request.
 * **Blazing Fast Cache:** Built-in memory caching (`CACHE_TTL`) ensures repeated DNS queries are answered in milliseconds.
-* **Cross-Platform:** Includes intelligent, auto-installing deployment scripts for Windows, Linux (Debian/Ubuntu), and macOS.
-* **Dockerized:** Runs in a secure, isolated container to keep your host system clean.
+* **Cross-Platform:** Includes intelligent, auto-installing deployment scripts for Windows (`start_windows.bat`), Linux, and macOS (`start_unix.sh`).
+* **Dockerized:** Runs in a secure, isolated container using a lightweight Alpine Python image.
 * **Fully Configurable:** Easy setup using a standard `.env` file.
 
 ---
@@ -27,7 +27,7 @@ You don't need to be a Python expert to run this. The included deployment script
 
 ```
 
-*(Troubleshooting: If `chmod` fails or you still get a permission error, you can force the execution by running `sudo bash start_unix.sh` directly).*
+*(Troubleshooting: If `chmod` fails or you still get a permission error, you can force execution by running `sudo bash start_unix.sh` directly).*
 3. Run the deployment script as root/admin:
 
 ```bash
@@ -47,7 +47,7 @@ sudo ./start_unix.sh
 
 ## ⚙️ Configuration
 
-You can easily customize how the Sinkhole behaves without touching the Python code. Open the `.env` file to adjust the settings:
+You can easily customize how **DNS Sink0** behaves without touching the Python code. Open the `.env` file to adjust the settings:
 
 | Variable | Default Value | Description |
 | --- | --- | --- |
@@ -80,6 +80,5 @@ Once you have verified the server is working:
 1. Log in to your home router's admin panel (usually `192.168.1.1` or `192.168.0.1`).
 2. Find the **DHCP / LAN / DNS** settings.
 3. Change the **Primary DNS Server** to the IP address of the machine running this container.
-4. Save and reboot your router. Now, every device connected to your Wi-Fi is ad-free!
+4. Save and reboot your router. Now, every device connected to your Wi-Fi is protected by DNS Sink0!
 
-```
