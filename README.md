@@ -1,5 +1,6 @@
 # 🛡️ DNS Sink0
 **Version:** 1.4.0 | **Author:** Alhasan Al-Hmondi
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 
