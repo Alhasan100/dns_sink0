@@ -1,0 +1,5 @@
+# Tvinga Git att alltid använda LF (Linux-stil) för shell-skript
+*.sh text eol=lf
+
+# Tvinga Git att alltid använda CRLF (Windows-stil) för batch-skript
+*.bat text eol=crlf

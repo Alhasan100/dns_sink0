@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  dns_sinkhole:
+    build: .
+    container_name: python_dns_sinkhole
+    restart: unless-stopped
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"

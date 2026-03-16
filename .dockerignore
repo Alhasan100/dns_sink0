@@ -1,0 +1,6 @@
+.git
+.gitignore
+README.md
+start_unix.sh
+start_windows.bat
+__pycache__/
