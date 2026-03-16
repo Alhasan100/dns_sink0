@@ -22,7 +22,7 @@ You don't need to be a Python expert to run this. The included deployment script
 ### For Linux & macOS
 1. Open your terminal and navigate to the project folder.
 2. Make the deployment script executable:
-   ```bash
+```bash
    chmod +x start_unix.sh
 
 ```
