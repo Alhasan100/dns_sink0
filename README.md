@@ -23,8 +23,7 @@ You don't need to be a Python expert to run this. The included deployment script
 1. Open your terminal and navigate to the project folder.
 2. Make the deployment script executable:
 ```bash
-   chmod +x start_unix.sh
-
+chmod +x start_unix.sh
 ```
 
 *(Troubleshooting: If `chmod` fails or you still get a permission error, you can force execution by running `sudo bash start_unix.sh` directly).*
@@ -32,7 +31,6 @@ You don't need to be a Python expert to run this. The included deployment script
 
 ```bash
 sudo ./start_unix.sh
-
 ```
 
 4. The script will automatically handle port conflicts (like `systemd-resolved` on Linux), build the container, and output your server's IP address.
