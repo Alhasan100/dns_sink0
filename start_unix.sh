@@ -1,29 +1,31 @@
 #!/bin/bash
-
 # ==============================================================================
-# Cross-Platform Deployment Script (Linux & macOS)
+# Description: Cross-platform deployment script for the DNS Sinkhole. Handles 
+#              dependencies (Docker), port conflicts, and container startup.
+# Version: 1.2.0
+# Author: Alhasan Al-Hmondi
 # ==============================================================================
 
 echo "Initializing DNS Sinkhole Deployment..."
 
-# Check OS type
+# Check which OS we are running on to apply the correct logic
 OS="$(uname -s)"
 echo "[INFO] Detected Operating System: $OS"
 
 if [ "$OS" = "Linux" ]; then
-    # 1. Check for root privileges
+    # 1. Root privilege check
+    # We need root access to free up port 53 and install packages
     if [ "$EUID" -ne 0 ]; then
       echo "[ERROR] On Linux, this script requires administrative privileges."
       echo "Action required: Please run as root (e.g., 'sudo ./start_unix.sh')."
       exit 1
     fi
 
-    # 2. AUTO-INSTALL DOCKER (NEW!)
+    # 2. Auto-install Docker if it's missing
+    # This ensures a smooth "one-click" experience for new servers
     if ! command -v docker &> /dev/null; then
         echo "[INFO] Docker is NOT installed. Installing Docker now..."
-        # Install curl if it's missing (needed to download Docker)
         apt-get update -y && apt-get install -y curl
-        # Download and run Docker's official installation script
         curl -fsSL https://get.docker.com -o get-docker.sh
         sh get-docker.sh
         rm get-docker.sh
@@ -32,7 +34,8 @@ if [ "$OS" = "Linux" ]; then
         echo "[INFO] Docker is already installed."
     fi
 
-    # 3. Handle systemd-resolved conflict (Port 53)
+    # 3. Handle systemd-resolved conflict
+    # Modern Linux distros bind port 53 to systemd-resolved by default. We need to disable that stub listener.
     if systemctl is-active --quiet systemd-resolved 2>/dev/null; then
         echo "[INFO] 'systemd-resolved' is active. Reconfiguring to release port 53..."
         cp /etc/systemd/resolved.conf /etc/systemd/resolved.conf.bak
@@ -57,18 +60,17 @@ fi
 echo "------------------------------------------------------------------"
 echo "[INFO] Building and provisioning the Docker container..."
 
-# 4. Deploy the application
-# Using "docker compose" (modern v2 standard)
+# 4. Deploy the application using modern Docker Compose
 docker compose up -d --build
 
 if [ $? -eq 0 ]; then
-    # Försök hämta den lokala IP-adressen
+    # Try to extract the local IP address dynamically so the user knows what to configure in their router
     if [ "$OS" = "Linux" ]; then
         LOCAL_IP=$(hostname -I | awk '{print $1}')
     elif [ "$OS" = "Darwin" ]; then
         LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1)
     else
-        LOCAL_IP="<din-dators-ip>"
+        LOCAL_IP="<your-machine-ip>"
     fi
 
     echo "=================================================================="
