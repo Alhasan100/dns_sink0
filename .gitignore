@@ -11,9 +11,7 @@ desktop.ini
 
 # Environment & Secrets
 .vscode/
-.env
 .venv/
-env/
 venv/
 
 # Docker local system data
