@@ -10,6 +10,7 @@ Thumbs.db
 desktop.ini
 
 # Environment & Secrets
+.vscode
 .env
 .venv/
 env/
