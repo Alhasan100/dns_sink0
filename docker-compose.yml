@@ -1,6 +1,6 @@
 # ==============================================================================
 # Description: Docker Compose configuration for the DNS Sinkhole service.
-# Version: 1.4.0
+# Version: 1.5.0
 # Author: Alhasan Al-Hmondi
 # ==============================================================================
 
@@ -8,9 +8,9 @@
 version: '3.8'
 
 services:
-  dns_sinkhole:
+  dns_sink0:
     build: .
-    container_name: python_dns_sinkhole
+    container_name: python_dns_sink0
     restart: unless-stopped
     ports:
       - "53:53/udp"

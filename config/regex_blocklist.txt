@@ -1,0 +1,12 @@
+# ==============================================================================
+# DNS Sink0 - Regex Blocklist
+# Add one regular expression per line to block domains matching the pattern.
+# Lines starting with '#' are ignored by the Python parser.
+# ==============================================================================
+
+
+# Block any domain that strictly starts with "ads." (e.g., ads.example.com)
+^ads\..*
+
+# Block any domain that ends exactly with the ".adserver.com" root
+.*\.adserver\.com

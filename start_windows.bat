@@ -1,13 +1,13 @@
 @echo off
 SETLOCAL EnableDelayedExpansion
 :: ==============================================================================
-:: Description: Windows deployment script for the DNS Sinkhole. Automates Docker 
+:: Description: Windows deployment script for the DNS Sink0. Automates Docker 
 ::              Desktop installation, environment checks, and container startup.
 :: Version: 1.2.0
 :: Author: Alhasan Al-Hmondi
 :: ==============================================================================
 
-echo Initializing DNS Sinkhole Deployment for Windows...
+echo Initializing DNS Sink0 Deployment for Windows...
 echo.
 
 :: 1. Check for Administrative privileges
@@ -74,7 +74,7 @@ if %errorLevel% equ 0 (
 
     echo.
     echo ==================================================================
-    echo  [SUCCESS] DNS Sinkhole is now active and operational! 
+    echo  [SUCCESS] DNS Sink0 is now active and operational! 
     echo ==================================================================
     echo Next Step: Configure your router's Primary DNS to point to this IP:
     echo.

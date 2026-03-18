@@ -1,12 +1,12 @@
 #!/bin/bash
 # ==============================================================================
-# Description: Cross-platform deployment script for the DNS Sinkhole. Handles 
+# Description: Cross-platform deployment script for the DNS Sink0. Handles 
 #              dependencies (Docker), port conflicts, and container startup.
 # Version: 1.2.0
 # Author: Alhasan Al-Hmondi
 # ==============================================================================
 
-echo "Initializing DNS Sinkhole Deployment..."
+echo "Initializing DNS Sink0 Deployment..."
 
 # Check which OS we are running on to apply the correct logic
 OS="$(uname -s)"
@@ -74,7 +74,7 @@ if [ $? -eq 0 ]; then
     fi
 
     echo "=================================================================="
-    echo " [SUCCESS] DNS Sinkhole is now active and operational! "
+    echo " [SUCCESS] DNS Sink0 is now active and operational! "
     echo "=================================================================="
     echo "Next Step: Configure your router's Primary DNS to point to this IP:"
     echo " "

@@ -1,6 +1,21 @@
+# Git metadata
 .git
 .gitignore
+
+# Documentation & Host-side scripts
 README.md
+LICENSE
 start_unix.sh
 start_windows.bat
+docker-compose.yml
+
+# Environment & IDE settings
+.env
+.vscode/
+.idea/
+
+# Python artifacts
 __pycache__/
+*.pyc
+*.pyo
+.venv/

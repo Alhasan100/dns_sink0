@@ -1,0 +1,12 @@
+# ==============================================================================
+# DNS Sink0 - Allowlist (Whitelist)
+# Domains listed here will NEVER be blocked, overriding all blocklists.
+# Add one domain per line. Example: my-favorite-streaming-site.com
+# ==============================================================================
+
+# Example: Streaming services you always want to allow
+svt.se
+netflix.com
+
+# Example: Work or development domains
+github.com

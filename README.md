@@ -1,90 +1,109 @@
-
 # 🛡️ DNS Sink0
-**Version:** 1.5.0 | **Author:** Alhasan Al-Hmondi
+**Version:** 2.0.0-beta | **Author:** Alhasan Al-Hmondi
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-A lightweight, blazing-fast DNS Sinkhole (network-wide adblocker) built with Python and Docker. **DNS Sink0** protects your entire home network by intercepting DNS requests to known ad, tracking, and malware domains, routing them into a "sinkhole" (0.0.0.0) before they can even load.
+DNS Sink0 is a professional-grade, high-performance DNS Sinkhole developed in Python and optimized for Docker. It serves as a network-wide firewall for DNS traffic, neutralizing advertisements, trackers, and malware at the resolution layer before they reach your devices.
 
-## ✨ Features
-* **Modular Blocklists (New in v1.5.0!):** Easily add your own remote URLs or drop local `.txt` files into the `config/` directory. No container rebuilds required!
-* **Smart Parsing Engine:** Automatically cleans messy list formats. Supports standard hosts, raw domains, and Adblock Plus (`||domain.com^`) syntax.
-* **Background Auto-Update:** Silently refreshes all blocklists in the background at custom intervals without dropping a single DNS request.
-* **Blazing Fast Cache:** Built-in memory caching (`CACHE_TTL`) ensures repeated DNS queries are answered in milliseconds.
-* **Cross-Platform & Dockerized:** Auto-installing deployment scripts for Windows (`start_windows.bat`), Linux, and macOS (`start_unix.sh`).
+## 🏗️ Architecture & Packet Flow
+The server utilizes a non-blocking UDP listener. Each incoming query is evaluated through a prioritized pipeline to ensure deterministic behavior and maximum throughput:
+
+
+
+1.  **Allowlist Check:** Immediate bypass for trusted domains ($O(1)$ complexity).
+2.  **Regex Evaluation:** Pattern matching for complex subdomain structures (e.g., `.*\.telemetry\..*`).
+3.  **Static Blocklist:** Final check against millions of known malicious domains ($O(1)$ complexity).
+4.  **Cache Lookup:** Returns previously resolved safe queries without upstream latency.
+5.  **Recursive Forwarding:** Queries passing all filters are sent to the `UPSTREAM_DNS`.
 
 ---
 
-## 📂 Configuration & Custom Blocklists
-
-DNS Sink0 uses a mapped `config/` volume, allowing you to manage your blocklists effortlessly. When you run the container, it creates the following structure:
+## 📂 System File Structure
+DNS Sink0 uses a mapped volume for persistent configuration. The following structure is maintained within the project directory:
 
 ```text
 dns_sink0/
-├── config/                              
-│   ├── local_blocklists/                
-│   │   └── my_custom_ads.txt            <-- Drop custom .txt domain lists here
-│   └── remote_blocklists.txt            <-- Paste URLs for auto-downloading here
+├── src/
+│   └── dns_server.py          # Core DNS Logic & Filtering Engine
+├── config/                    # Persistent Configuration Volume
+│   ├── allowlist.txt          # Priority: High (Never Block)
+│   ├── regex_blocklist.txt    # Priority: Medium (Pattern Matching)
+│   ├── remote_blocklists.txt  # Auto-syncing remote URL sources
+│   └── local_blocklists/      # Directory for custom .txt domain lists
+├── docker-compose.yml         # Container orchestration
+├── .env                       # Environment variables & Tuning
+├── start_unix.sh              # Linux/macOS Deployment Script
+└── start_windows.bat          # Windows Deployment Script
 ```
 
-* **`remote_blocklists.txt`**: Add raw text/hosts URLs here (one per line). The background updater will download and merge them automatically.
-* **`local_blocklists/`**: Create `.txt` files here to block specific domains manually. The smart parser automatically handles messy syntax, meaning you can paste domains directly from other adblockers without formatting them first.
-
 ---
 
-## 🚀 Quick Start (Deployment)
+## 🚀 Deployment & Platform Recommendation
 
-You don't need to be a Python expert to run this. The included deployment scripts handle everything—including installing Docker if you don't have it!
+### 🐧 Recommended Platform: Linux
+For production environments, **Linux (Ubuntu, Debian, or Raspberry Pi OS) is highly recommended**. 
+* **Kernel Efficiency:** Superior handling of the UDP stack on port 53.
+* **Low Overhead:** Avoids the virtualization layer (WSL2/Hyper-V) required by Docker Desktop on Windows.
+* **Reliability:** Built for 24/7 "headless" operation.
 
-### For Linux & macOS
-1. Open your terminal and navigate to the project folder.
-2. Make the deployment script executable:
-   ```bash
-   chmod +x start_unix.sh
-   ```
-3. Run the deployment script as root/admin:
-   ```bash
-   sudo ./start_unix.sh
-   ```
-
-### For Windows
-1. Open File Explorer and navigate to the project folder.
-2. Right-click `start_windows.bat` and select **"Run as administrator"**.
-3. If Docker Desktop is not installed, the script will automatically download and set it up for you.
-
----
-
-## ⚙️ Environment Variables
-
-Customize how the server behaves by editing the `.env` file:
-
-| Variable | Default Value | Description |
-| :--- | :--- | :--- |
-| `UPSTREAM_DNS` | `8.8.8.8` | The DNS server to forward safe traffic to (e.g., `1.1.1.1` for Cloudflare). |
-| `UPSTREAM_PORT`| `53` | The port used by the upstream DNS server. |
-| `CACHE_TTL` | `300` | How long (in seconds) safe domains are kept in the lightning-fast memory cache. |
-| `BLOCKLIST_UPDATE_INTERVAL` | `86400` | Auto-update interval for the blocklists (in seconds). 86400 = 24 hours. |
-
----
-
-## 🧪 Testing Your Sinkhole
-
-Before changing your router settings, verify the sinkhole is actively blocking ads. Run this command from your terminal (replace `<YOUR_IP>` with the IP address of your server):
-
+### 1. Environment Configuration
+Define your operational parameters in the `.env` file:
 ```bash
-# Test a known ad domain (Should return 0.0.0.0)
-nslookup doubleclick.net <YOUR_IP>
+UPSTREAM_DNS=8.8.8.8           # Primary upstream resolver (e.g., Google or Cloudflare)
+CACHE_TTL=300                  # Cache duration in seconds
+BLOCKLIST_UPDATE_INTERVAL=86400 # Auto-refresh interval (24h)
+```
 
-# Test a normal domain (Should return a real IP address)
-nslookup github.com <YOUR_IP>
+### 2. Execution
+* **Linux/macOS (Production):**
+    ```bash
+    chmod +x start_unix.sh
+    sudo ./start_unix.sh
+    ```
+* **Windows (Testing Only):**
+    Run `start_windows.bat` as **Administrator**.
+
+### 🔄 Forcing an Immediate Update
+If you modify your lists and need the changes to take effect immediately without waiting for the auto-update cycle:
+```bash
+docker restart python_dns_sink0
 ```
 
 ---
 
-## 🌐 Network-Wide Setup
+## 🌐 Network-Wide Integration
+To protect every device in your home or office, follow these steps:
 
-1. Log in to your home router's admin panel (usually `192.168.1.1` or `192.168.0.1`).
-2. Find the **DHCP / LAN / DNS** settings.
-3. Change the **Primary DNS Server** to the IP address of the machine running DNS Sink0.
-4. Save and reboot your router. Every device connected to your Wi-Fi is now protected!
+1.  **Identify Server IP:** Find the static local IP address of the machine running DNS Sink0.
+2.  **Router Configuration:** * Access your router's admin panel (usually `192.168.1.1`).
+    * Navigate to **LAN / DHCP / DNS Settings**.
+    * Set the **Primary DNS** to the IP of your DNS Sink0 host.
+3.  **Reboot Router:** **Crucial Step.** Rebooting the router forces all connected devices to refresh their DHCP lease and start using the new DNS settings immediately.
+4.  **Client Flush:** On individual PCs, you may also run `ipconfig /flushdns` (Windows) or `sudo killall -HUP mDNSResponder` (macOS).
 
+---
 
+## 🛠️ Operational Maintenance & Troubleshooting
+
+### Monitoring & Health Checks
+Observe real-time blocking and server health via the Docker log stream. This is the primary way to verify that queries are being processed:
+```bash
+docker logs -f python_dns_sink0
+```
+
+### Common Issues & Solutions
+
+* **Port 53 Binding Failure:** * *Cause:* On many Linux distros, `systemd-resolved` occupies port 53 by default. 
+    * *Fix:* Disable the stub listener in `/etc/systemd/resolved.conf` or stop the service before starting the container.
+* **Permission Denied (Socket Error):** * *Cause:* Port 53 is a "privileged" port. 
+    * *Fix:* Ensure you are running the deployment scripts with `sudo` (Linux) or as an Administrator (Windows).
+* **Upstream Connection Timeout:** * *Cause:* Firewall rules or incorrect `UPSTREAM_DNS` IP in `.env`. 
+    * *Fix:* Verify the host machine can ping the upstream DNS (e.g., `ping 8.8.8.8`).
+* **IPv6 Leakage:** * *Cause:* If your router provides an IPv6 DNS address, devices might bypass DNS Sink0. 
+    * *Fix:* Disable IPv6 DNS in your router or ensure DNS Sink0 is configured for IPv6 (Future update).
+* **Changes Not Reflecting:** * *Cause:* Client-side OS cache or browser cache (DNS-over-HTTPS). 
+    * *Fix:* Disable "Secure DNS" in Chrome/Firefox settings and flush OS DNS cache.
+
+---
+
+## ⚖️ Performance & Scalability
+By utilizing Python `Sets` for domain storage and pre-compiled `RE` objects for pattern matching, DNS Sink0 maintains a near-constant lookup time regardless of list size. This ensures that your internet speed remains unaffected even with millions of active block rules.

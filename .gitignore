@@ -1,14 +1,19 @@
-# Python
+# Python process artifacts
 __pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
 
-# Mac / Windows systemfiler
+# OS metadata (Mac/Windows)
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Docker
-.docker/
-
-# Miljövariabler 
+# Environment & Secrets
 .env
+.venv/
+env/
+venv/
+
+# Docker local system data
+.docker/
