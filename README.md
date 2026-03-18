@@ -23,7 +23,8 @@ DNS Sink0 uses a mapped volume for persistent configuration. The following struc
 ```text
 dns_sink0/
 ├── src/
-│   └── dns_server.py          # Core DNS Logic & Filtering Engine
+│   ├── dns_server.py          # Core DNS Logic & Filtering Engine
+│   └── requirements.txt       # Python dependencies (dnslib, etc.)
 ├── config/                    # Persistent Configuration Volume
 │   ├── allowlist.txt          # Priority: High (Never Block)
 │   ├── regex_blocklist.txt    # Priority: Medium (Pattern Matching)
@@ -31,6 +32,8 @@ dns_sink0/
 │   └── local_blocklists/      # Directory for custom .txt domain lists
 ├── docker-compose.yml         # Container orchestration
 ├── .env                       # Environment variables & Tuning
+├── .gitignore                 # Git exclusion rules
+├── .dockerignore              # Docker build exclusion rules
 ├── start_unix.sh              # Linux/macOS Deployment Script
 └── start_windows.bat          # Windows Deployment Script
 ```
@@ -78,7 +81,6 @@ To protect every device in your home or office, follow these steps:
     * Navigate to **LAN / DHCP / DNS Settings**.
     * Set the **Primary DNS** to the IP of your DNS Sink0 host.
 3.  **Reboot Router:** **Crucial Step.** Rebooting the router forces all connected devices to refresh their DHCP lease and start using the new DNS settings immediately.
-4.  **Client Flush:** On individual PCs, you may also run `ipconfig /flushdns` (Windows) or `sudo killall -HUP mDNSResponder` (macOS).
 
 ---
 
