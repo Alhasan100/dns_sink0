@@ -1,0 +1,17 @@
+# ==============================================================================
+# DNS Sink0 - Remote Blocklists Configuration
+# Add one raw text/hosts URL per line. 
+# Lines starting with '#' are ignored by the Python parser.
+# ==============================================================================
+
+# 1. The Baseline (Standard Ad, Tracking, and Malware Blocking)
+https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+
+# 2. Aggressive Ad & Popup Blockers (Great for aggressive streaming sites)
+https://big.oisd.nl/
+https://raw.githubusercontent.com/AdAway/adaway.github.io/master/hosts.txt
+https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+
+# 3. Anti-Malware, Scams & Phishing Blockers
+https://urlhaus.abuse.ch/downloads/hostfile/
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/hosts/ti.txt

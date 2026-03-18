@@ -1,0 +1,17 @@
+# ==============================================================================
+# DNS Sink0 - Local Custom Blocklist
+# File: config/local_blocklists/my_custom_block.txt
+# ==============================================================================
+
+# 1. Standard domains (The cleanest way, one per line)
+ex1.beer
+ex2.cloud
+
+# 2. Standard 'hosts' file format (Used by older systems)
+0.0.0.0 annoying-tracker.com
+127.0.0.1 bad-malware-site.net
+
+# 3. Messy syntax copied from Adblock lists (The parser will clean this automatically!)
+'||gammavirexasystem.com^',
+||pop-under-ads.com^
+'ads.xtra.co.nz',

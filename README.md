@@ -1,19 +1,33 @@
+
 # 🛡️ DNS Sink0
-**Version:** 1.4.0 | **Author:** Alhasan Al-Hmondi
-
+**Version:** 1.5.0 | **Author:** Alhasan Al-Hmondi
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-
-
 
 A lightweight, blazing-fast DNS Sinkhole (network-wide adblocker) built with Python and Docker. **DNS Sink0** protects your entire home network by intercepting DNS requests to known ad, tracking, and malware domains, routing them into a "sinkhole" (0.0.0.0) before they can even load.
 
 ## ✨ Features
-* **Dynamic Blocklist:** Automatically downloads over 100,000+ domains from StevenBlack's respected hosts file.
-* **Background Auto-Update:** Silently refreshes the blocklist in the background at custom intervals without dropping a single DNS request.
+* **Modular Blocklists (New in v1.5.0!):** Easily add your own remote URLs or drop local `.txt` files into the `config/` directory. No container rebuilds required!
+* **Smart Parsing Engine:** Automatically cleans messy list formats. Supports standard hosts, raw domains, and Adblock Plus (`||domain.com^`) syntax.
+* **Background Auto-Update:** Silently refreshes all blocklists in the background at custom intervals without dropping a single DNS request.
 * **Blazing Fast Cache:** Built-in memory caching (`CACHE_TTL`) ensures repeated DNS queries are answered in milliseconds.
-* **Cross-Platform:** Includes intelligent, auto-installing deployment scripts for Windows (`start_windows.bat`), Linux, and macOS (`start_unix.sh`).
-* **Dockerized:** Runs in a secure, isolated container using a lightweight Alpine Python image.
-* **Fully Configurable:** Easy setup using a standard `.env` file.
+* **Cross-Platform & Dockerized:** Auto-installing deployment scripts for Windows (`start_windows.bat`), Linux, and macOS (`start_unix.sh`).
+
+---
+
+## 📂 Configuration & Custom Blocklists
+
+DNS Sink0 uses a mapped `config/` volume, allowing you to manage your blocklists effortlessly. When you run the container, it creates the following structure:
+
+```text
+dns_sink0/
+├── config/                              
+│   ├── local_blocklists/                
+│   │   └── my_custom_ads.txt            <-- Drop custom .txt domain lists here
+│   └── remote_blocklists.txt            <-- Paste URLs for auto-downloading here
+```
+
+* **`remote_blocklists.txt`**: Add raw text/hosts URLs here (one per line). The background updater will download and merge them automatically.
+* **`local_blocklists/`**: Create `.txt` files here to block specific domains manually. The smart parser automatically handles messy syntax, meaning you can paste domains directly from other adblockers without formatting them first.
 
 ---
 
@@ -24,43 +38,37 @@ You don't need to be a Python expert to run this. The included deployment script
 ### For Linux & macOS
 1. Open your terminal and navigate to the project folder.
 2. Make the deployment script executable:
-```bash
-chmod +x start_unix.sh
-```
-
-*(Troubleshooting: If `chmod` fails or you still get a permission error, you can force execution by running `sudo bash start_unix.sh` directly).*
+   ```bash
+   chmod +x start_unix.sh
+   ```
 3. Run the deployment script as root/admin:
-
-```bash
-sudo ./start_unix.sh
-```
-
-4. The script will automatically handle port conflicts (like `systemd-resolved` on Linux), build the container, and output your server's IP address.
+   ```bash
+   sudo ./start_unix.sh
+   ```
 
 ### For Windows
-
 1. Open File Explorer and navigate to the project folder.
 2. Right-click `start_windows.bat` and select **"Run as administrator"**.
-3. If Docker Desktop is not installed, the script will download and install it for you (a restart might be required). Run the script again once Docker is active.
+3. If Docker Desktop is not installed, the script will automatically download and set it up for you.
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ Environment Variables
 
-You can easily customize how **DNS Sink0** behaves without touching the Python code. Open the `.env` file to adjust the settings:
+Customize how the server behaves by editing the `.env` file:
 
 | Variable | Default Value | Description |
-| --- | --- | --- |
+| :--- | :--- | :--- |
 | `UPSTREAM_DNS` | `8.8.8.8` | The DNS server to forward safe traffic to (e.g., `1.1.1.1` for Cloudflare). |
-| `UPSTREAM_PORT` | `53` | The port used by the upstream DNS server. |
+| `UPSTREAM_PORT`| `53` | The port used by the upstream DNS server. |
 | `CACHE_TTL` | `300` | How long (in seconds) safe domains are kept in the lightning-fast memory cache. |
-| `BLOCKLIST_UPDATE_INTERVAL` | `86400` | Auto-update interval for the blocklist (in seconds). 86400 = 24 hours. |
+| `BLOCKLIST_UPDATE_INTERVAL` | `86400` | Auto-update interval for the blocklists (in seconds). 86400 = 24 hours. |
 
 ---
 
 ## 🧪 Testing Your Sinkhole
 
-Before changing your router settings, verify that the sinkhole is actively blocking ads. Run this command from your terminal (replace `<YOUR_IP>` with the IP address provided by the deployment script):
+Before changing your router settings, verify the sinkhole is actively blocking ads. Run this command from your terminal (replace `<YOUR_IP>` with the IP address of your server):
 
 ```bash
 # Test a known ad domain (Should return 0.0.0.0)
@@ -68,17 +76,15 @@ nslookup doubleclick.net <YOUR_IP>
 
 # Test a normal domain (Should return a real IP address)
 nslookup github.com <YOUR_IP>
-
 ```
 
 ---
 
 ## 🌐 Network-Wide Setup
 
-Once you have verified the server is working:
-
 1. Log in to your home router's admin panel (usually `192.168.1.1` or `192.168.0.1`).
 2. Find the **DHCP / LAN / DNS** settings.
-3. Change the **Primary DNS Server** to the IP address of the machine running this container.
-4. Save and reboot your router. Now, every device connected to your Wi-Fi is protected by DNS Sink0!
+3. Change the **Primary DNS Server** to the IP address of the machine running DNS Sink0.
+4. Save and reboot your router. Every device connected to your Wi-Fi is now protected!
+
 

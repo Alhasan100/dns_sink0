@@ -1,8 +1,9 @@
 # ==============================================================================
 # Description: Docker Compose configuration for the DNS Sinkhole service.
-# Version: 1.3.0
+# Version: 1.4.0
 # Author: Alhasan Al-Hmondi
 # ==============================================================================
+
 
 version: '3.8'
 
@@ -14,9 +15,13 @@ services:
     ports:
       - "53:53/udp"
     
-    # Dynamically inject environment variables from the .env file.
+    # Mount the config directory so you can edit lists without rebuilding
+    volumes:
+      - ./config:/config
+    
     environment:
       - UPSTREAM_DNS=${UPSTREAM_DNS:-8.8.8.8}
       - UPSTREAM_PORT=${UPSTREAM_PORT:-53}
       - CACHE_TTL=${CACHE_TTL:-300}
       - BLOCKLIST_UPDATE_INTERVAL=${BLOCKLIST_UPDATE_INTERVAL:-86400}
+      - CONFIG_DIR=/config
