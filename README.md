@@ -1,5 +1,5 @@
 # 🛡️ DNS Sink0
-**Version:** 1.5.0 | **Author:** Alhasan Al-Hmondi
+**Version:** 2.0.0-beta | **Author:** Alhasan Al-Hmondi
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 DNS Sink0 is a professional-grade, high-performance DNS Sinkhole developed in Python and optimized for Docker. It serves as a network-wide firewall for DNS traffic, neutralizing advertisements, trackers, and malware at the resolution layer before they reach your devices.
@@ -73,6 +73,13 @@ docker restart python_dns_sink0
 
 ---
 
+## 🗺️ Project Roadmap (Future Updates)
+* **SQLite Query Logging & Analytics:** Implementing a lightweight, persistent local database to store query history. This will enable rich traffic analysis, top-blocked domain charts, and client activity tracking without overloading system memory.
+* **Web-Based Dashboard (HTTP GUI):** A Flask-powered web interface is currently under development. This will allow users to visualize real-time database statistics, seamlessly manage allowlists/blocklists, and monitor system health directly through a browser.
+* **API Integration:** RESTful endpoints for remote management and automation.
+
+---
+
 ## 🌐 Network-Wide Integration
 To protect every device in your home or office, follow these steps:
 
@@ -87,23 +94,17 @@ To protect every device in your home or office, follow these steps:
 ## 🛠️ Operational Maintenance & Troubleshooting
 
 ### Monitoring & Health Checks
-Observe real-time blocking and server health via the Docker log stream. This is the primary way to verify that queries are being processed:
+Observe real-time blocking and server health via the Docker log stream:
 ```bash
 docker logs -f python_dns_sink0
 ```
 
 ### Common Issues & Solutions
 
-* **Port 53 Binding Failure:** * *Cause:* On many Linux distros, `systemd-resolved` occupies port 53 by default. 
-    * *Fix:* Disable the stub listener in `/etc/systemd/resolved.conf` or stop the service before starting the container.
-* **Permission Denied (Socket Error):** * *Cause:* Port 53 is a "privileged" port. 
-    * *Fix:* Ensure you are running the deployment scripts with `sudo` (Linux) or as an Administrator (Windows).
-* **Upstream Connection Timeout:** * *Cause:* Firewall rules or incorrect `UPSTREAM_DNS` IP in `.env`. 
-    * *Fix:* Verify the host machine can ping the upstream DNS (e.g., `ping 8.8.8.8`).
-* **IPv6 Leakage:** * *Cause:* If your router provides an IPv6 DNS address, devices might bypass DNS Sink0. 
-    * *Fix:* Disable IPv6 DNS in your router or ensure DNS Sink0 is configured for IPv6 (Future update).
-* **Changes Not Reflecting:** * *Cause:* Client-side OS cache or browser cache (DNS-over-HTTPS). 
-    * *Fix:* Disable "Secure DNS" in Chrome/Firefox settings and flush OS DNS cache.
+* **Port 53 Binding Failure:** * *Fix:* Disable `systemd-resolved` on Linux or check for other DNS services using port 53.
+* **Permission Denied (Socket Error):** * *Fix:* Run deployment scripts with `sudo` (Linux) or as Administrator (Windows).
+* **IPv6 Leakage:** * *Fix:* Ensure IPv6 DNS is disabled in your router settings to prevent bypass.
+* **Changes Not Reflecting:** * *Fix:* Flush OS DNS cache (`ipconfig /flushdns`) and disable "Secure DNS" (DoH) in your browser settings.
 
 ---
 

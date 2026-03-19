@@ -1,6 +1,6 @@
 """
 Description: A lightweight, fast DNS Sinkhole (Adblocker) with modular blocklists.
-Version: 1.5.0 
+Version: 2.0.0-beta  
 Author: Alhasan Al-Hmondi
 """
 

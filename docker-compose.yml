@@ -1,6 +1,6 @@
 # ==============================================================================
 # Description: Docker Compose configuration for the DNS Sinkhole service.
-# Version: 1.5.0
+# Version: 2.0.0-beta
 # Author: Alhasan Al-Hmondi
 # ==============================================================================
 
