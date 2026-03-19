@@ -6,6 +6,7 @@
 # Author: Alhasan Al-Hmondi
 # ==============================================================================
 
+
 echo "Initializing DNS Sink0 Deployment..."
 
 # Check which OS we are running on to apply the correct logic

@@ -1,5 +1,5 @@
 # 🛡️ DNS Sink0
-**Version:** 2.0.0-beta | **Author:** Alhasan Al-Hmondi
+**Version:** 1.5.0 | **Author:** Alhasan Al-Hmondi
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 DNS Sink0 is a professional-grade, high-performance DNS Sinkhole developed in Python and optimized for Docker. It serves as a network-wide firewall for DNS traffic, neutralizing advertisements, trackers, and malware at the resolution layer before they reach your devices.

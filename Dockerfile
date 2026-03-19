@@ -17,6 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application source code into the container
 COPY src/ /app/
 
+
 # Expose standard DNS ports (UDP is primary for DNS, TCP for fallback)
 EXPOSE 53/udp
 EXPOSE 53/tcp
