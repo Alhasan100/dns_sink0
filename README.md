@@ -84,7 +84,7 @@ docker restart python_dns_sink0
 To protect every device in your home or office, follow these steps:
 
 1.  **Identify Server IP:** Find the static local IP address of the machine running DNS Sink0.
-2.  **Router Configuration:** * Access your router's admin panel (usually `192.168.1.1`).
+2.  **Router Configuration:** Access your router's admin panel (usually `192.168.1.1`).
     * Navigate to **LAN / DHCP / DNS Settings**.
     * Set the **Primary DNS** to the IP of your DNS Sink0 host.
 3.  **Reboot Router:** **Crucial Step.** Rebooting the router forces all connected devices to refresh their DHCP lease and start using the new DNS settings immediately.
