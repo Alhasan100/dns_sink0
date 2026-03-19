@@ -101,10 +101,10 @@ docker logs -f python_dns_sink0
 
 ### Common Issues & Solutions
 
-* **Port 53 Binding Failure:** * *Fix:* Disable `systemd-resolved` on Linux or check for other DNS services using port 53.
-* **Permission Denied (Socket Error):** * *Fix:* Run deployment scripts with `sudo` (Linux) or as Administrator (Windows).
-* **IPv6 Leakage:** * *Fix:* Ensure IPv6 DNS is disabled in your router settings to prevent bypass.
-* **Changes Not Reflecting:** * *Fix:* Flush OS DNS cache (`ipconfig /flushdns`) and disable "Secure DNS" (DoH) in your browser settings.
+* **Port 53 Binding Failure:**  *Fix:* Disable `systemd-resolved` on Linux or check for other DNS services using port 53.
+* **Permission Denied (Socket Error):**  *Fix:* Run deployment scripts with `sudo` (Linux) or as Administrator (Windows).
+* **IPv6 Leakage:**  *Fix:* Ensure IPv6 DNS is disabled in your router settings to prevent bypass.
+* **Changes Not Reflecting:**  *Fix:* Flush OS DNS cache (`ipconfig /flushdns`) and disable "Secure DNS" (DoH) in your browser settings.
 
 ---
 
