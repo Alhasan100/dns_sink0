@@ -84,7 +84,8 @@ docker restart python_dns_sink0
 To protect every device in your home or office, follow these steps:
 
 1.  **Identify Server IP:** Find the static local IP address of the machine running DNS Sink0.
-2.  **Router Configuration:** Access your router's admin panel (usually `192.168.1.1`).
+2.  **Router Configuration:**
+    * Access your router's admin panel (usually `192.168.1.1`).
     * Navigate to **LAN / DHCP / DNS Settings**.
     * Set the **Primary DNS** to the IP of your DNS Sink0 host.
 3.  **Reboot Router:** **Crucial Step.** Rebooting the router forces all connected devices to refresh their DHCP lease and start using the new DNS settings immediately.
@@ -101,10 +102,14 @@ docker logs -f python_dns_sink0
 
 ### Common Issues & Solutions
 
-* **Port 53 Binding Failure:**  *Fix:* Disable `systemd-resolved` on Linux or check for other DNS services using port 53.
-* **Permission Denied (Socket Error):**  *Fix:* Run deployment scripts with `sudo` (Linux) or as Administrator (Windows).
-* **IPv6 Leakage:**  *Fix:* Ensure IPv6 DNS is disabled in your router settings to prevent bypass.
-* **Changes Not Reflecting:**  *Fix:* Flush OS DNS cache (`ipconfig /flushdns`) and disable "Secure DNS" (DoH) in your browser settings.
+* **Port 53 Binding Failure:**
+    * *Fix:* Disable `systemd-resolved` on Linux or check for other DNS services using port 53.
+* **Permission Denied (Socket Error):**
+    * *Fix:* Run deployment scripts with `sudo` (Linux) or as Administrator (Windows).
+* **IPv6 Leakage:**
+   * *Fix:* Ensure IPv6 DNS is disabled in your router settings to prevent bypass.
+* **Changes Not Reflecting:**
+   * *Fix:* Flush OS DNS cache (`ipconfig /flushdns`) and disable "Secure DNS" (DoH) in your browser settings.
 
 ---
 
